@@ -20,7 +20,7 @@ setup(
             'obraz = obraz:main',
         ],
     },
-    data_files=[(os.path.join('obraz', root), files)
+    data_files=[(os.path.join('share', 'obraz', root), files)
                 for root, files
                 in all_data_files('scaffold', excluded_dirs=['_site'])],
     url='http://obraz.pirx.ru/',
