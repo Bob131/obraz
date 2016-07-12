@@ -337,7 +337,7 @@ def jinja2_render_string(string, context, config):
     includes = os.path.join(config['source'], '_includes')
     env = Environment(loader=FileSystemLoader(includes))
     for name, f in _template_filters.items():
-        env.filters[name] = lambda s: f(s, config)
+        env.filters[name] = lambda s, f=f: f(s, config)
     t = env.from_string(string)
     return t.render(**context)
 
