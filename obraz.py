@@ -196,12 +196,14 @@ def merge(x1, x2):
 
 
 def all_source_files(source, destination):
+    source = source.encode()
+    destination = destination.encode()
     dst_base, dst_name = os.path.split(os.path.realpath(destination))
     for source, dirs, files in os.walk(source):
         if os.path.realpath(source) == dst_base and dst_name in dirs:
             dirs.remove(dst_name)
         for filename in files:
-            yield os.path.join(source, filename)
+            yield os.path.join(source, filename).decode("utf8")
 
 
 def changed_files(source, destination, config, poll_interval=1):
@@ -343,7 +345,7 @@ def jinja2_render_string(string, context, config):
 
 
 def read_template(path):
-    with open(path, 'rb') as fd:
+    with open(path.encode(), 'rb') as fd:
         if fd.read(3) != b'---':
             return None
         lines = []
@@ -520,7 +522,7 @@ def generate_files(site):
         src = os.path.join(site['source'], file_dict['path'])
         dst = os.path.join(site['destination'], url2path(file_dict['url']))
         make_dirs(os.path.dirname(dst))
-        shutil.copy(src, dst)
+        shutil.copy(src.encode(), dst.encode())
 
 
 def load_plugins(source):
