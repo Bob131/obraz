@@ -12,7 +12,7 @@ def all_data_files(path, excluded_dirs=()):
 
 setup(
     name='obraz',
-    version='0.9',
+    version='0.9.1',
     py_modules=['obraz'],
     install_requires=['PyYAML', 'Jinja2', 'Markdown', 'docopt'],
     entry_points={
