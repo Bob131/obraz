@@ -45,7 +45,6 @@ Options:
     -b --baseurl=URL        Serve the website from the given base URL.
 
     -q --quiet              Be quiet.
-    -t --trace              Display traceback when an error occurs.
     -v --version            Show version.
     -h --help               Show help message.
 
@@ -285,12 +284,6 @@ def info(message):
         log(message)
 
 
-def exception(e, trace):
-    if trace:
-        traceback.print_tb(sys.exc_traceback)
-    log('Error: {0}'.format(e))
-
-
 def log(message):
     sys.stderr.write('{0}\n'.format(message))
     sys.stderr.flush()
@@ -505,8 +498,9 @@ def generate_page(page, site):
         try:
             rendered = render_page(page, site)
         except Exception as e:
-            msg = "Cannot render '{0}': {1}".format(page.get('path'), e)
-            raise Exception(msg)
+            traceback.print_exc()
+            print("Cannot render '{0}', exiting".format(page.get('path')))
+            sys.exit(1)
         fd.write(rendered.encode(PAGE_ENCODING))
 
 
@@ -639,8 +633,6 @@ def watch(config):
                 build_delta(changed, config)
         except KeyboardInterrupt:
             raise
-        except Exception as e:
-            exception(e, config.get('trace'))
         os.chdir(destination)
         log_serving(config)
         thread = Thread(target=server.serve_forever)
@@ -720,9 +712,6 @@ def obraz(argv):
                 serve(config)
     except KeyboardInterrupt:
         info('Interrupted')
-    except BaseException as e:
-        exception(e, opts['--trace'])
-        raise
 
 
 def main():
@@ -730,6 +719,7 @@ def main():
     try:
         obraz(sys.argv[1:])
     except Exception:
+        traceback.print_exc()
         sys.exit(1)
 
 

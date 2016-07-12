@@ -24,7 +24,7 @@ class ObrazTest(unittest.TestCase):
             source = os.path.join(tempdir, 'source')
             shutil.copytree(src, source)
             os.chdir(source)
-            obraz.obraz(['build', '-q', '-t'] + list(extra_args))
+            obraz.obraz(['build', '-q'] + list(extra_args))
             destination = os.path.join(source, '_site')
             self.assert_directories_equal(site, destination)
         finally:
@@ -78,7 +78,7 @@ class ObrazTest(unittest.TestCase):
         tempdir = tempfile.mkdtemp()
         try:
             actual = os.path.join(tempdir, 'actual')
-            obraz.obraz(['new', actual, '-q', '-t'])
+            obraz.obraz(['new', actual, '-q'])
             self.assert_directories_equal(expected, actual)
         finally:
             shutil.rmtree(tempdir)
